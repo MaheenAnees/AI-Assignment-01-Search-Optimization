@@ -32,7 +32,7 @@ class SimulatedAnnealing:
         #for every neighbour check whether its in the boundary to consider it as valid move
         for i in range(len(neighbourhood)):
             if self.checkBoundary(neighbourhood[i][0], neighbourhood[i][1]) == True:
-                validMoves.append(neighbourhood[i])
+                validMoves.append((round(neighbourhood[i][0], 2), round(neighbourhood[i][1], 2)))
         #return a random move from valid moves        
         return validMoves
     
