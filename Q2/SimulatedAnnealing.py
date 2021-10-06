@@ -19,6 +19,7 @@ class SimulatedAnnealing:
         self.stepSize = stepSize
         self.opType = opType    #the operation type: either max or min
 
+    #check whether the coordinates are within the given limits or not
     def checkBoundary(self, x, y):
         if  x >= self.xLower and x <= self.xUpper and y >= self.yLower and y <= self.yUpper:
             return True
@@ -40,13 +41,13 @@ class SimulatedAnnealing:
         x = random.randint(self.xLower, self.xUpper)
         y = random.randint(self.yLower, self.yUpper)
         temp = self.function(x, y) * 0.2
+        #add the x,y, f coords in the plot list for visualization
+        self.xcoordLst.append(x)
+        self.ycoordLst.append(y)
+        self.funcLst.append(self.function(x,y))
 
         while(temp > self.minTemp):
             for i in range(self.iterations):
-                #add the x,y, f coords in the plot list for visualization
-                self.xcoordLst.append(x)
-                self.ycoordLst.append(y)
-                self.funcLst.append(self.function(x,y))
                 #choose a random neighbour
                 newX, newY = random.choice(self.returnNeighbour(x,y))
                 delta = self.function(newX, newY) - self.function(x, y)
@@ -61,6 +62,10 @@ class SimulatedAnnealing:
                         x, y = newX, newY
             #decrease the temp by given factor
             temp = self.coolingFactor * temp
+            #add the x,y, f coords in the plot list for visualization
+            self.xcoordLst.append(x)
+            self.ycoordLst.append(y)
+            self.funcLst.append(self.function(x,y))
         
 
 
@@ -83,7 +88,9 @@ def rosenbrockFunc(x,y):
 def griewankFunc(x,y):
     return (((x ** 2) + (y ** 2)) / 4000) - math.cos(x) * math.cos(y / math.sqrt(2)) + 1
 
-
-func1 = SimulatedAnnealing(function=sphereFunc, limits=[0,0,100,100], minTemp = 0.0000001, factor=0.9, iterations=100, stepSize=0.1, opType='max')
+# limits = [xLower, yLower, xUpper, yUpper] 
+func1 = SimulatedAnnealing(function=sphereFunc, limits=[-5,-5,5,5], minTemp = 0.0000001, factor=0.9, iterations=100, stepSize=0.1, opType='max')
 func1.algorithm()
 func1.visualize()
+
+
