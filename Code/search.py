@@ -17,7 +17,7 @@ In search.py, you will implement generic search algorithms which are called by
 Pacman agents (in searchAgents.py).
 """
 
-import util
+from util import *
 
 class SearchProblem:
     """
@@ -74,12 +74,55 @@ class SearchProblem:
         util.raiseNotDefined()
 
 
-def aStarSearch(problem):
-    """Search the node that has the lowest combined cost and heuristic first."""
-    "*** YOUR A* CODE HERE ***"
-    util.raiseNotDefined()
+def aStarSearch(problem: SearchProblem):
+    """Search the node that has the lowest combined cost and heuristic first.
+    
+    Reference used for inspiration: 
+    https://www.redblobgames.com/pathfinding/a-star/implementation.html
+    
+    """
+
+    # Initialization of the frontier of the queue and the dictionaries to maintain for the 
+    # algorithm. 
+
+    frontier = PriorityQueue() 
+    start = problem.getStartState()
+    frontier.push(start, 0)
+
+    came_from = dict()
+    cost_so_far = dict()
+    came_from[str(start)] = None
+    cost_so_far[str(start)] = 0
+
+    while not frontier.isEmpty():
+        current = frontier.pop()
+
+        # Reaching the goal state
+        if (problem.isGoalState(current)):
+            break
+
+        # Traversing the neighbors/successors of the current state
+        for successor, action, stepCost in problem.getSuccessors(current):
+            new_cost = cost_so_far[str(current)] + stepCost
+
+            # Updating costs according to the new information received, if applicable
+            if str(successor) not in cost_so_far or new_cost < cost_so_far[str(successor)]:
+                cost_so_far[str(successor)] = new_cost
+                priority = new_cost + int(problem.getHeuristic(successor))
+                frontier.push(successor, priority)
+                came_from[str(successor)] = current
+
+    # Using the path travelled to get the states taken at each stage
+    path = list()
+    node = current
+    path.insert(0, (came_from[str(node)], node))
+
+    while came_from[str(node)] != start:
+        node = came_from[str(node)] 
+        path.insert(0, (came_from[str(node)], node))    
+
+    # Returning the path and the cost of taking that path
+    return path, problem.getCostOfActions(path)
 
 
-
-
-
+    

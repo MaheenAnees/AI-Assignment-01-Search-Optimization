@@ -1,5 +1,8 @@
 from search import *
 
+
+# Reading all the csv files into data structures named cities, connections and heuristics
+
 f = open('CSV\cities.csv', 'r')
 cities = list()
 connections = dict()
@@ -34,9 +37,15 @@ f1.close()
 f2.close()
     
 
+# The class for the Route planning problem that inherits from the SearchProblem class
+ 
 class RoutePlanning(SearchProblem):
     
     def __init__(self, start, destination, cities, connections, heuristics):
+        """
+        Initializes the variables needed for the routing problem
+        """
+
         self.start = start
         self.destination = destination
         self.cities = cities
@@ -71,11 +80,12 @@ class RoutePlanning(SearchProblem):
         successors = list()
 
         for i in range(len(connections[state])):
-            successor = connections[state][i][0]
-            action = (state, successor)
-            stepCost = connections[state][i][1]
+            if (connections[state][i][1] != '0' and connections[state][i][1] != '-1'):
+                successor = connections[state][i][0]
+                action = (state, successor)
+                stepCost = int(connections[state][i][1])
 
-            successors.append((successor, action, stepCost))
+                successors.append((successor, action, stepCost))
 
         return successors
 
@@ -95,7 +105,7 @@ class RoutePlanning(SearchProblem):
             
             for j in range(len(connections[start_state])):
                 if(end_state == connections[start_state][j][0]):
-                    totalCost += connections[start_state][j][1]
+                    totalCost += int(connections[start_state][j][1])
 
         return totalCost
         
@@ -106,4 +116,16 @@ class RoutePlanning(SearchProblem):
          THis function returns the heuristic of current state of the agent which will be the 
          estimated distance from goal.
         """
+
         return self.heuristics[state][self.cities.index(self.destination)][1]
+
+
+# For testing the route planning problem
+
+start_city = "Hunza"
+end_city = "Naran"
+problem = RoutePlanning(start_city, end_city, cities, connections, heuristics)
+path, cost = aStarSearch(problem)
+
+print(f"The path taken is: {path}")
+print(f"The cost incurred is: {cost}")
