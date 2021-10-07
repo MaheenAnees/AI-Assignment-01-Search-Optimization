@@ -80,6 +80,7 @@ def aStarSearch(problem: SearchProblem):
     Reference used for inspiration: 
     https://www.redblobgames.com/pathfinding/a-star/implementation.html
     
+    The algorithm takes any framed search problem and finds it optimal solution with the cost incurred
     """
 
     # Initialization of the frontier of the queue and the dictionaries to maintain for the 

@@ -51,33 +51,27 @@ class JumpingFrogs(SearchProblem):
             successor = list(state)
 
             if (state[i] == 'G'):
-                try:
-                    if (state[i+1] == '_'):
+                    if (i + 1 < len(state) and state[i+1] == '_'):
                         successor[i], successor[i+1] = successor[i+1], successor[i]
                         stepCost = 1
                         successors.append((successor, (state, successor), stepCost))
 
 
-                    elif (state[i+1] == 'B' and state[i+2] == '_'):
+                    elif (i + 2 < len(state) and state[i+1] == 'B' and state[i+2] == '_'):
                         successor[i], successor[i+2] = successor[i+2], successor[i]
                         stepCost = 2
                         successors.append((successor, (state, successor), stepCost))
-                except:
-                    continue
 
             elif (state[i] == 'B'):
-                try:
-                    if (state[i-1] == '_'):
+                    if (i - 1 > -1 and state[i-1] == '_'):
                         successor[i], successor[i-1] = successor[i-1], successor[i]
                         stepCost = 1
                         successors.append((successor, (state, successor), stepCost))
 
-                    elif (state[i-1] == 'G' and state[i-2] == '_'):
+                    elif (i - 2 > -1 and state[i-1] == 'G' and state[i-2] == '_'):
                         successor[i], successor[i-2] = successor[i-2], successor[i]
                         stepCost = 2
                         successors.append((successor, (state, successor), stepCost))
-                except:
-                    continue
 
         return successors
 
